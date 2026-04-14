@@ -1,0 +1,55 @@
+services:
+  # MYSQL Database
+  database:
+    image: mysql:8.0
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    networks:
+      - c2brothers
+
+  # WORDPRESS
+  wordpress:
+    depends_on:
+      - database
+    image: wordpress:latest
+    ports:
+      - '8000:80'
+    restart: always
+    volumes:
+      - './wp_data:/var/www/html'
+      - './uploads.ini:/usr/local/etc/php/conf.d/uploads.ini'
+      - './wp-content/themes/c2brothers:/var/www/html/wp-content/themes/c2brothers'
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    networks:
+      - c2brothers
+
+  # PHPMYADMIN
+  phpmyadmin:
+    depends_on:
+      - database
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - c2brothers
+
+networks:
+  c2brothers:
+
+volumes:
+  db_data:

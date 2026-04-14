@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C² Brothers — Soluciones de software para pequeños negocios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --navy:    #0D1F3C;
+      --navy2:   #162D54;
+      --teal:    #2DD4BF;
+      --teal2:   #14B8A6;
+      --white:   #FFFFFF;
+      --gray50:  #F8FAFC;
+      --gray100: #F1F5F9;
+      --gray300: #CBD5E1;
+      --gray500: #64748B;
+      --gray700: #334155;
+      --radius:  12px;
+    }
+ 
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--gray700);
+      background: var(--white);
+      line-height: 1.6;
+    }
+ 
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,31,60,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+ 
+    .logo {
+      font-size: 1.4rem; font-weight: 800; color: var(--white);
+      text-decoration: none; letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--teal); }
+ 
+    nav ul {
+      list-style: none; display: flex; gap: 2rem; align-items: center;
+    }
+    nav ul a {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; transition: color .2s;
+    }
+    nav ul a:hover { color: var(--teal); }
+ 
+    .nav-cta {
+      background: var(--teal); color: var(--navy) !important;
+      padding: 0.55rem 1.3rem; border-radius: 8px;
+      font-weight: 700 !important; transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--teal2) !important; color: var(--navy) !important; }
+ 
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 60%, #0f2d4a 100%);
+      display: flex; align-items: center;
+      padding: 0 5%; padding-top: 68px;
+      position: relative; overflow: hidden;
+    }
+ 
+    #hero::before {
+      content: '';
+      position: absolute; top: -200px; right: -200px;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,212,191,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+ 
+    #hero::after {
+      content: '';
+      position: absolute; bottom: -100px; left: 10%;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+ 
+    .hero-inner {
+      max-width: 1100px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+ 
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(45,212,191,0.15); border: 1px solid rgba(45,212,191,0.3);
+      color: var(--teal); border-radius: 100px;
+      padding: 0.35rem 1rem; font-size: 0.8rem; font-weight: 600;
+      margin-bottom: 1.5rem; letter-spacing: 0.5px;
+    }
+ 
+    .hero-badge::before { content: '●'; font-size: 0.5rem; }
+ 
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 800; color: var(--white);
+      line-height: 1.15; letter-spacing: -1px;
+      margin-bottom: 1.5rem;
+    }
+ 
+    h1 em { color: var(--teal); font-style: normal; }
+ 
+    .hero-desc {
+      font-size: 1.1rem; color: rgba(255,255,255,0.7);
+      max-width: 480px; margin-bottom: 2.5rem; line-height: 1.7;
+    }
+ 
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+ 
+    .btn-primary {
+      background: var(--teal); color: var(--navy);
+      padding: 0.85rem 2rem; border-radius: 10px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: background .2s, transform .2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--teal2); transform: translateY(-2px); }
+ 
+    .btn-secondary {
+      background: transparent; color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      padding: 0.85rem 2rem; border-radius: 10px;
+      font-weight: 600; font-size: 1rem; text-decoration: none;
+      transition: border-color .2s, transform .2s;
+      display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-2px); }
+ 
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+    }
+ 
+    .hero-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 2rem;
+      backdrop-filter: blur(10px); width: 100%; max-width: 380px;
+    }
+ 
+    .hero-card-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem; border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      margin-bottom: 0.75rem;
+    }
+    .hero-card-row:last-child { margin-bottom: 0; }
+ 
+    .hero-card-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(45,212,191,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+ 
+    .hero-card-text { color: rgba(255,255,255,0.85); font-size: 0.88rem; font-weight: 500; }
+    .hero-card-sub { color: rgba(255,255,255,0.45); font-size: 0.75rem; margin-top: 2px; }
+ 
+    /* ── SECTIONS ── */
+    section { padding: 5rem 5%; }
+ 
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+ 
+    .section-tag {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 2px;
+      color: var(--teal2); text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+ 
+    h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 800; color: var(--navy);
+      letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 1rem;
+    }
+ 
+    .section-desc {
+      font-size: 1.05rem; color: var(--gray500);
+      max-width: 580px; line-height: 1.7;
+    }
+ 
+    /* ── NOSOTROS ── */
+    #nosotros { background: var(--gray50); }
+ 
+    .nosotros-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center; margin-top: 3rem;
+    }
+ 
+    .nosotros-text p {
+      color: var(--gray500); line-height: 1.8; margin-bottom: 1.25rem; font-size: 0.98rem;
+    }
+ 
+    .nosotros-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+ 
+    .stat-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 1.75rem; border: 1px solid var(--gray100);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+ 
+    .stat-num {
+      font-size: 2.2rem; font-weight: 800; color: var(--navy);
+      line-height: 1; margin-bottom: 0.4rem;
+    }
+    .stat-num span { color: var(--teal2); }
+    .stat-label { font-size: 0.85rem; color: var(--gray500); font-weight: 500; }
+ 
+    /* ── CÓMO TRABAJAMOS ── */
+    #como {
+      background: var(--navy);
+    }
+ 
+    #como h2 { color: var(--white); }
+    #como .section-tag { color: var(--teal); }
+    #como .section-desc { color: rgba(255,255,255,0.6); }
+ 
+    .steps {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem; margin-top: 3.5rem; position: relative;
+    }
+ 
+    .steps::before {
+      content: '';
+      position: absolute; top: 32px; left: 12%; right: 12%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal) 0%, rgba(45,212,191,0.2) 100%);
+    }
+ 
+    .step {
+      text-align: center; position: relative;
+    }
+ 
+    .step-num {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(45,212,191,0.15); border: 2px solid var(--teal);
+      color: var(--teal); font-size: 1.3rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem; position: relative; z-index: 1;
+    }
+ 
+    .step-title {
+      font-size: 1rem; font-weight: 700; color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+ 
+    .step-desc {
+      font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.6;
+    }
+ 
+    /* ── SECTORES ── */
+    #sectores { background: var(--white); }
+ 
+    .sectores-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3rem;
+    }
+ 
+    .sector-card {
+      border: 1.5px solid var(--gray100);
+      border-radius: 16px; padding: 2rem;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      cursor: default;
+    }
+ 
+    .sector-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(45,212,191,0.12);
+    }
+ 
+    .sector-icon {
+      font-size: 2.2rem; margin-bottom: 1rem;
+    }
+ 
+    .sector-name {
+      font-size: 1.05rem; font-weight: 700; color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+ 
+    .sector-desc {
+      font-size: 0.88rem; color: var(--gray500); line-height: 1.6;
+    }
+ 
+    /* ── POR QUÉ NOSOTROS ── */
+    #porque { background: var(--gray50); }
+ 
+    .porqué-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3rem;
+    }
+ 
+    .porque-card {
+      background: var(--white); border-radius: 16px; padding: 2rem;
+      border: 1px solid var(--gray100);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+ 
+    .porque-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(45,212,191,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 1.25rem;
+    }
+ 
+    .porque-title {
+      font-size: 1rem; font-weight: 700; color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+ 
+    .porque-desc {
+      font-size: 0.88rem; color: var(--gray500); line-height: 1.6;
+    }
+ 
+    /* ── CONTACTO ── */
+    #contacto {
+      background: linear-gradient(135deg, var(--navy) 0%, #1a3a6b 100%);
+    }
+ 
+    #contacto h2 { color: var(--white); }
+    #contacto .section-tag { color: var(--teal); }
+    #contacto .section-desc { color: rgba(255,255,255,0.65); }
+ 
+    .contacto-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: start; margin-top: 3rem;
+    }
+ 
+    .contacto-info { color: rgba(255,255,255,0.75); }
+ 
+    .contacto-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+ 
+    .contacto-item-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(45,212,191,0.15); border: 1px solid rgba(45,212,191,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+ 
+    .contacto-item-label {
+      font-size: 0.78rem; color: rgba(255,255,255,0.45);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.2rem;
+    }
+ 
+    .contacto-item-val {
+      font-size: 0.95rem; color: var(--white); font-weight: 500;
+    }
+ 
+    .form {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 2.5rem;
+    }
+ 
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+ 
+    .form-group { margin-bottom: 1.25rem; }
+ 
+    label {
+      display: block; font-size: 0.82rem; font-weight: 600;
+      color: rgba(255,255,255,0.6); margin-bottom: 0.45rem; letter-spacing: 0.3px;
+    }
+ 
+    input, textarea, select {
+      width: 100%; padding: 0.8rem 1rem;
+      background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 10px; color: var(--white); font-family: 'Inter', sans-serif;
+      font-size: 0.92rem; transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+ 
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
+ 
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--teal);
+    }
+ 
+    select option { background: var(--navy); }
+ 
+    textarea { resize: vertical; min-height: 130px; }
+ 
+    .form-btn {
+      width: 100%; padding: 0.95rem;
+      background: var(--teal); color: var(--navy);
+      border: none; border-radius: 10px;
+      font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background .2s, transform .2s; margin-top: 0.5rem;
+    }
+    .form-btn:hover { background: var(--teal2); transform: translateY(-2px); }
+ 
+    /* ── FOOTER ── */
+    footer {
+      background: #060E1C;
+      padding: 2.5rem 5%;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+ 
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+ 
+    .footer-logo {
+      font-size: 1.2rem; font-weight: 800; color: var(--white);
+    }
+    .footer-logo span { color: var(--teal); }
+ 
+    .footer-text { font-size: 0.82rem; color: rgba(255,255,255,0.35); }
+ 
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-inner, .nosotros-grid, .contacto-inner {
+        grid-template-columns: 1fr;
+      }
+      .hero-visual { display: none; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .steps::before { display: none; }
+      .sectores-grid, .porqué-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+ 
+    @media (max-width: 600px) {
+      .sectores-grid, .porqué-grid, .nosotros-stats {
+        grid-template-columns: 1fr;
+      }
+      .steps { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+ 
+  <!-- NAV -->
+  <nav>
+    <a class="logo" href="#hero">C<span>²</span> Brothers</a>
+    <ul>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#como">Cómo trabajamos</a></li>
+      <li><a href="#sectores">Sectores</a></li>
+      <li><a href="#contacto" class="nav-cta">Contáctanos</a></li>
+    </ul>
+  </nav>
+ 
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">Software a medida para tu negocio</div>
+        <h1>Digitalizamos tu negocio con <em>soluciones simples</em> que funcionan</h1>
+        <p class="hero-desc">
+          Desarrollamos software pequeño y efectivo para que los negocios de siempre puedan trabajar mejor, sin complicaciones ni grandes inversiones.
+        </p>
+        <div class="hero-btns">
+          <a href="#contacto" class="btn-primary">Hablemos de tu negocio</a>
+          <a href="#como" class="btn-secondary">Cómo trabajamos</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hero-card-row">
+            <div class="hero-card-icon">🎯</div>
+            <div>
+              <div class="hero-card-text">Escuchamos tu problema</div>
+              <div class="hero-card-sub">Antes de escribir una línea de código</div>
+            </div>
+          </div>
+          <div class="hero-card-row">
+            <div class="hero-card-icon">⚙️</div>
+            <div>
+              <div class="hero-card-text">Construimos la solución</div>
+              <div class="hero-card-sub">Rápida, clara y sin costes ocultos</div>
+            </div>
+          </div>
+          <div class="hero-card-row">
+            <div class="hero-card-icon">🚀</div>
+            <div>
+              <div class="hero-card-text">Te acompañamos</div>
+              <div class="hero-card-sub">También después del lanzamiento</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- NOSOTROS -->
+  <section id="nosotros">
+    <div class="section-inner">
+      <div class="section-tag">Quiénes somos</div>
+      <h2>Dos hermanos, un objetivo:<br>hacer la tecnología accesible</h2>
+      <div class="nosotros-grid">
+        <div class="nosotros-text">
+          <p>
+            Somos C² Brothers, una empresa fundada por dos hermanos con perfiles complementarios: uno con experiencia en desarrollo de software y otro en gestión y ventas. Juntos, entendemos tanto el lado técnico como el lado humano de cada negocio.
+          </p>
+          <p>
+            Creemos que la tecnología no tiene que ser cara ni complicada para ser efectiva. Por eso desarrollamos soluciones pequeñas y bien hechas, diseñadas para resolver problemas reales de negocios reales.
+          </p>
+          <p>
+            Nuestro proceso siempre empieza por escuchar. Antes de proponer nada, nos sentamos contigo para entender cómo trabajas, dónde pierdes tiempo y qué cambiaría si ese problema desapareciera.
+          </p>
+        </div>
+        <div class="nosotros-stats">
+          <div class="stat-card">
+            <div class="stat-num">100<span>%</span></div>
+            <div class="stat-label">Software desarrollado a medida para cada cliente</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">2<span>x</span></div>
+            <div class="stat-label">Más rápidos que una agencia tradicional</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">0</div>
+            <div class="stat-label">Costes ocultos ni contratos largos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">Soporte post-lanzamiento incluido</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- CÓMO TRABAJAMOS -->
+  <section id="como">
+    <div class="section-inner">
+      <div class="section-tag">Nuestro proceso</div>
+      <h2>Cómo trabajamos</h2>
+      <p class="section-desc">
+        Un proceso claro y transparente, de principio a fin. Sin sorpresas.
+      </p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-title">Escuchamos</div>
+          <div class="step-desc">Una primera conversación para entender tu negocio, tus procesos y el problema que quieres resolver.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-title">Diseñamos</div>
+          <div class="step-desc">Definimos la solución mínima que resuelve tu problema. Sin florituras, sin funciones que no necesitas.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-title">Desarrollamos</div>
+          <div class="step-desc">Construimos tu software con agilidad. Ves avances reales desde el primer momento, no solo al final.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-title">Acompañamos</div>
+          <div class="step-desc">Formación, soporte y mejoras continuas. Tu software crece contigo a medida que tu negocio evoluciona.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- SECTORES -->
+  <section id="sectores">
+    <div class="section-inner">
+      <div class="section-tag">Dónde trabajamos</div>
+      <h2>Sectores que conocemos</h2>
+      <p class="section-desc">
+        Trabajamos con negocios de todos los tamaños, especialmente con aquellos que aún gestionan sus procesos en papel o en Excel.
+      </p>
+      <div class="sectores-grid">
+        <div class="sector-card">
+          <div class="sector-icon">🍽️</div>
+          <div class="sector-name">Hostelería y restauración</div>
+          <div class="sector-desc">Gestión de reservas, control de stock, turnos de personal, pedidos y fidelización de clientes.</div>
+        </div>
+        <div class="sector-card">
+          <div class="sector-icon">🔧</div>
+          <div class="sector-name">Talleres y servicios técnicos</div>
+          <div class="sector-desc">Control de trabajos, presupuestos, historial de clientes, gestión de piezas y facturación.</div>
+        </div>
+        <div class="sector-card">
+          <div class="sector-icon">🏭</div>
+          <div class="sector-name">Pequeña industria y logística</div>
+          <div class="sector-desc">Control de almacén, entrada y salida de material, trazabilidad de pedidos y reportes.</div>
+        </div>
+        <div class="sector-card">
+          <div class="sector-icon">🛒</div>
+          <div class="sector-name">Comercio y distribución</div>
+          <div class="sector-desc">Gestión de catálogo, pedidos, clientes y control de ventas en un solo lugar.</div>
+        </div>
+        <div class="sector-card">
+          <div class="sector-icon">🏥</div>
+          <div class="sector-name">Servicios de salud y bienestar</div>
+          <div class="sector-desc">Agenda de citas, historial de pacientes/clientes, recordatorios automáticos y facturación.</div>
+        </div>
+        <div class="sector-card">
+          <div class="sector-icon">📦</div>
+          <div class="sector-name">Otros sectores</div>
+          <div class="sector-desc">Si tienes un proceso manual que te quita tiempo, casi seguro podemos digitalizarlo. Cuéntanos.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- POR QUÉ NOSOTROS -->
+  <section id="porque">
+    <div class="section-inner">
+      <div class="section-tag">Por qué elegirnos</div>
+      <h2>Lo que nos hace diferentes</h2>
+      <div class="porqué-grid">
+        <div class="porque-card">
+          <div class="porque-icon">👂</div>
+          <div class="porque-title">Primero entendemos, luego construimos</div>
+          <div class="porque-desc">No vendemos soluciones estándar. Cada proyecto empieza con una conversación profunda sobre cómo funciona tu negocio.</div>
+        </div>
+        <div class="porque-card">
+          <div class="porque-icon">⚡</div>
+          <div class="porque-title">Soluciones rápidas y sin burocracia</div>
+          <div class="porque-desc">Sin equipos grandes, sin jerarquías. Hablas directamente con quien desarrolla. Eso se traduce en velocidad y claridad.</div>
+        </div>
+        <div class="porque-card">
+          <div class="porque-icon">💶</div>
+          <div class="porque-title">Precios justos y transparentes</div>
+          <div class="porque-desc">Nada de presupuestos de agencia. Definimos el alcance juntos y el precio es el que acordamos desde el principio.</div>
+        </div>
+        <div class="porque-card">
+          <div class="porque-icon">🔁</div>
+          <div class="porque-title">Software que evoluciona contigo</div>
+          <div class="porque-desc">No desaparecemos cuando lanzamos. Mejoramos el software según lo que el uso real nos va enseñando.</div>
+        </div>
+        <div class="porque-card">
+          <div class="porque-icon">🤝</div>
+          <div class="porque-title">Trato cercano y de confianza</div>
+          <div class="porque-desc">Somos dos hermanos que construimos esto con seriedad y con ganas. Tratamos cada negocio como si fuera el nuestro.</div>
+        </div>
+        <div class="porque-card">
+          <div class="porque-icon">🎯</div>
+          <div class="porque-title">Foco en el resultado, no en la tecnología</div>
+          <div class="porque-desc">No te hablamos de frameworks ni de arquitecturas. Te hablamos de cuánto tiempo ahorrarás y qué problemas desaparecerán.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="section-inner">
+      <div class="section-tag">Contacto</div>
+      <h2>¿Tienes un problema que resolver?</h2>
+      <p class="section-desc">
+        Cuéntanos cómo funciona tu negocio y qué te gustaría cambiar. La primera conversación es gratis y sin compromiso.
+      </p>
+      <div class="contacto-inner">
+        <div class="contacto-info">
+          <div class="contacto-item">
+            <div class="contacto-item-icon">📧</div>
+            <div>
+              <div class="contacto-item-label">Email</div>
+              <div class="contacto-item-val">hola@c2brothers.com</div>
+            </div>
+          </div>
+          <div class="contacto-item">
+            <div class="contacto-item-icon">📱</div>
+            <div>
+              <div class="contacto-item-label">WhatsApp / Teléfono</div>
+              <div class="contacto-item-val">+34 600 000 000</div>
+            </div>
+          </div>
+          <div class="contacto-item">
+            <div class="contacto-item-icon">🕐</div>
+            <div>
+              <div class="contacto-item-label">Respondemos en</div>
+              <div class="contacto-item-val">Menos de 24 horas</div>
+            </div>
+          </div>
+          <div class="contacto-item">
+            <div class="contacto-item-icon">📍</div>
+            <div>
+              <div class="contacto-item-label">Ubicación</div>
+              <div class="contacto-item-val">España · También trabajamos en remoto</div>
+            </div>
+          </div>
+        </div>
+        <div class="form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" placeholder="Tu nombre" />
+            </div>
+            <div class="form-group">
+              <label for="empresa">Empresa / Negocio</label>
+              <input type="text" id="empresa" placeholder="Nombre de tu negocio" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="tu@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="sector">Sector</label>
+            <select id="sector">
+              <option value="" disabled selected>¿A qué se dedica tu negocio?</option>
+              <option>Hostelería / Restauración</option>
+              <option>Taller / Servicio técnico</option>
+              <option>Industria / Logística</option>
+              <option>Comercio / Distribución</option>
+              <option>Salud / Bienestar</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="mensaje">¿Cuál es tu principal problema o necesidad?</label>
+            <textarea id="mensaje" placeholder="Cuéntanos qué proceso te da más problemas o qué te gustaría mejorar en tu negocio..."></textarea>
+          </div>
+          <button class="form-btn">Enviar mensaje →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">C<span>²</span> Brothers</div>
+      <div class="footer-text">© 2025 C² Brothers · Soluciones de software para pequeños negocios</div>
+    </div>
+  </footer>
+ 
+</body>
+</html>
